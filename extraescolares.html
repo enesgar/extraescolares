@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Extraescolares</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F0F2ED;
+    --bg-elevated: #E6E9E1;
+    --ink: #1B2321;
+    --ink-soft: #5C655F;
+    --line: rgba(27,35,33,0.13);
+    --mateo: #2E6B5C;
+    --telma: #8C3A62;
+    --now: #B4790F;
+    --chip-bg: #E6E9E1;
+    --chip-ink: #1B2321;
+    --chip-active-bg: #1B2321;
+    --chip-active-ink: #F0F2ED;
+    --shadow: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12181A;
+      --bg-elevated: #1B2224;
+      --ink: #ECEFE9;
+      --ink-soft: #A7B0AA;
+      --line: rgba(236,239,233,0.14);
+      --mateo: #74C2AC;
+      --telma: #E491B4;
+      --now: #E6B25C;
+      --chip-bg: #1B2224;
+      --chip-ink: #ECEFE9;
+      --chip-active-bg: #ECEFE9;
+      --chip-active-ink: #12181A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12181A;
+    --bg-elevated: #1B2224;
+    --ink: #ECEFE9;
+    --ink-soft: #A7B0AA;
+    --line: rgba(236,239,233,0.14);
+    --mateo: #74C2AC;
+    --telma: #E491B4;
+    --now: #E6B25C;
+    --chip-bg: #1B2224;
+    --chip-ink: #ECEFE9;
+    --chip-active-bg: #ECEFE9;
+    --chip-active-ink: #12181A;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100dvh;
+  }
+
+  .app {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: env(safe-area-inset-top, 0px) 20px calc(env(safe-area-inset-bottom, 0px) + 32px);
+    min-height: 100dvh;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 22px 0 18px;
+  }
+  .topbar .title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: -0.01em;
+  }
+  .topbar .subtitle {
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  /* Hero */
+  .hero {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 20px 0 22px;
+    opacity: 0;
+    transform: translateY(6px);
+    animation: rise 0.5s ease-out forwards;
+  }
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+  @media (prefers-reduced-motion: reduce) {
+    .hero { animation: none; opacity: 1; transform: none; }
+  }
+
+  .hero-label {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: 0 0 8px;
+  }
+  .hero-label .dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--now);
+    margin-right: 7px;
+    position: relative;
+    top: -1px;
+  }
+  .hero-main {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .hero-time {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .hero-who {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .hero-activity {
+    margin-top: 6px;
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+  .hero-none {
+    font-size: 15px;
+    color: var(--ink-soft);
+    padding: 6px 0 2px;
+  }
+
+  /* Filters */
+  .filters {
+    display: flex;
+    gap: 8px;
+    padding: 18px 0 4px;
+  }
+  .chip {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: 100px;
+    border: none;
+    background: var(--chip-bg);
+    color: var(--chip-ink);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .chip.active {
+    background: var(--chip-active-bg);
+    color: var(--chip-active-ink);
+  }
+  .chip[data-child="Mateo"].active { background: var(--mateo); color: #fff; }
+  .chip[data-child="Telma"].active { background: var(--telma); color: #fff; }
+
+  /* Day nav */
+  .days {
+    display: flex;
+    gap: 4px;
+    padding: 18px 0 6px;
+  }
+  .day-btn {
+    flex: 1;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 0 8px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .day-btn.selected {
+    color: var(--ink);
+    border-bottom-color: var(--ink);
+  }
+  .day-btn .full {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 400;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+
+  /* Schedule list */
+  .schedule {
+    padding-top: 10px;
+  }
+  .slot {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .slot:last-child { border-bottom: none; }
+  .slot-time {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    width: 92px;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .slot-time span {
+    display: block;
+    color: var(--ink-soft);
+    font-weight: 400;
+    font-size: 12px;
+  }
+  .slot-body {
+    border-left: 3px solid var(--mateo);
+    padding-left: 12px;
+    flex: 1;
+  }
+  .slot-body.telma { border-left-color: var(--telma); }
+  .slot-child {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .slot-child.mateo-text { color: var(--mateo); }
+  .slot-child.telma-text { color: var(--telma); }
+  .slot-activity {
+    font-size: 15px;
+    margin-top: 2px;
+  }
+
+  .empty-day {
+    padding: 28px 0;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  .foot {
+    padding-top: 28px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <span class="title">Extraescolares</span>
+    <span class="subtitle">Mateo &amp; Telma</span>
+  </div>
+
+  <div class="hero" id="hero"></div>
+
+  <div class="filters" id="filters">
+    <button class="chip active" data-child="todos">Todos</button>
+    <button class="chip" data-child="Mateo">Mateo</button>
+    <button class="chip" data-child="Telma">Telma</button>
+  </div>
+
+  <nav class="days" id="days"></nav>
+
+  <main class="schedule" id="schedule"></main>
+
+  <div class="foot">Horario semanal fijo</div>
+</div>
+
+<script>
+(function () {
+  // weekdayIndex: 1=lunes ... 5=viernes (ISO)
+  var EVENTS = [
+    { day: 1, start: [17,30], end: [19,0],  child: "Mateo", activity: "Domingo Savio (PF)" },
+    { day: 1, start: [18,15], end: [19,15], child: "Telma", activity: "Inglés" },
+
+    { day: 2, start: [19,30], end: [21,0],  child: "Telma", activity: "Baloncesto" },
+
+    { day: 3, start: [16,0],  end: [17,0],  child: "Telma", activity: "Pádel" },
+    { day: 3, start: [17,0],  end: [18,0],  child: "Mateo", activity: "Pádel" },
+    { day: 3, start: [18,15], end: [19,15], child: "Telma", activity: "Inglés" },
+    { day: 3, start: [20,45], end: [21,45], child: "Mateo", activity: "Domingo Savio (C)" },
+
+    { day: 4, start: [16,0],  end: [17,0],  child: "Mateo", activity: "Inglés" },
+    { day: 4, start: [17,45], end: [18,45], child: "Mateo", activity: "Fútbol Sala (Puntales)" },
+    { day: 4, start: [18,0],  end: [19,0],  child: "Telma", activity: "Baloncesto (CdC)" },
+
+    { day: 5, start: [14,30], end: [16,0],  child: "Telma", activity: "Baloncesto" },
+    { day: 5, start: [18,0],  end: [19,0],  child: "Mateo", activity: "Liga Interna" }
+  ];
+
+  var DAY_NAMES = { 1: "Lunes", 2: "Martes", 3: "Miércoles", 4: "Jueves", 5: "Viernes" };
+  var DAY_SHORT = { 1: "L", 2: "M", 3: "X", 4: "J", 5: "V" };
+
+  function pad(n) { return n < 10 ? "0" + n : "" + n; }
+  function fmtTime(t) { return pad(t[0]) + ":" + pad(t[1]); }
+  function fmtRange(ev) { return fmtTime(ev.start) + "–" + fmtTime(ev.end); }
+
+  function atTime(date, h, m) {
+    var d = new Date(date);
+    d.setHours(h, m, 0, 0);
+    return d;
+  }
+  function addDays(date, n) {
+    var d = new Date(date);
+    d.setDate(d.getDate() + n);
+    return d;
+  }
+  function isoWeekday(date) {
+    var d = date.getDay();
+    return d === 0 ? 7 : d;
+  }
+
+  function findNext(now) {
+    var best = null;
+    EVENTS.forEach(function (ev) {
+      for (var offset = 0; offset <= 7; offset++) {
+        var candidateDate = addDays(now, offset);
+        if (isoWeekday(candidateDate) !== ev.day) continue;
+        var start = atTime(candidateDate, ev.start[0], ev.start[1]);
+        var end = atTime(candidateDate, ev.end[0], ev.end[1]);
+        if (offset === 0 && now >= end) continue; // already finished today, wait for next week
+        var ongoing = offset === 0 && now >= start && now < end;
+        if (!best || start < best.start) {
+          best = { ev: ev, start: start, end: end, offset: offset, ongoing: ongoing };
+        }
+        break;
+      }
+    });
+    return best;
+  }
+
+  function renderHero(now) {
+    var hero = document.getElementById("hero");
+    var next = findNext(now);
+    if (!next) {
+      hero.innerHTML = '<p class="hero-none">Sin actividades programadas.</p>';
+      return;
+    }
+    var label;
+    if (next.ongoing) label = '<span class="dot"></span>Ahora mismo';
+    else if (next.offset === 0) label = "Próxima actividad · hoy";
+    else if (next.offset === 1) label = "Próxima actividad · mañana";
+    else label = "Próxima actividad · " + DAY_NAMES[next.ev.day];
+
+    var whoColor = next.ev.child === "Mateo" ? "var(--mateo)" : "var(--telma)";
+    hero.innerHTML =
+      '<p class="hero-label">' + label + '</p>' +
+      '<div class="hero-main">' +
+        '<span class="hero-time">' + fmtTime(next.ev.start) + '</span>' +
+        '<span class="hero-who" style="color:' + whoColor + '">' + next.ev.child + '</span>' +
+      '</div>' +
+      '<p class="hero-activity">' + next.ev.activity + ' · hasta las ' + fmtTime(next.ev.end) + '</p>';
+  }
+
+  function renderDays(selectedDay, now) {
+    var nav = document.getElementById("days");
+    nav.innerHTML = "";
+    var todayIso = isoWeekday(now);
+    [1, 2, 3, 4, 5].forEach(function (d) {
+      var btn = document.createElement("button");
+      btn.className = "day-btn" + (d === selectedDay ? " selected" : "");
+      btn.dataset.day = d;
+      btn.innerHTML = DAY_SHORT[d] + '<span class="full">' + (d === todayIso ? "hoy" : DAY_NAMES[d].slice(0,3).toLowerCase()) + '</span>';
+      btn.addEventListener("click", function () {
+        state.day = d;
+        render();
+      });
+      nav.appendChild(btn);
+    });
+  }
+
+  function renderSchedule(day, childFilter) {
+    var list = document.getElementById("schedule");
+    var items = EVENTS.filter(function (ev) {
+      return ev.day === day && (childFilter === "todos" || ev.child === childFilter);
+    }).sort(function (a, b) {
+      return (a.start[0] * 60 + a.start[1]) - (b.start[0] * 60 + b.start[1]);
+    });
+
+    if (items.length === 0) {
+      list.innerHTML = '<p class="empty-day">Nada programado ' + (childFilter === "todos" ? "" : "para " + childFilter + " ") + 'este día.</p>';
+      return;
+    }
+
+    list.innerHTML = items.map(function (ev) {
+      var childClass = ev.child === "Mateo" ? "mateo" : "telma";
+      return (
+        '<div class="slot">' +
+          '<div class="slot-time">' + fmtTime(ev.start) + '<span>' + fmtTime(ev.end) + '</span></div>' +
+          '<div class="slot-body ' + childClass + '">' +
+            '<div class="slot-child ' + childClass + '-text">' + ev.child + '</div>' +
+            '<div class="slot-activity">' + ev.activity + '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join("");
+  }
+
+  function renderFilters() {
+    var chips = document.querySelectorAll("#filters .chip");
+    chips.forEach(function (chip) {
+      chip.classList.toggle("active", chip.dataset.child === state.child);
+      chip.onclick = function () {
+        state.child = chip.dataset.child;
+        render();
+      };
+    });
+  }
+
+  var state = {
+    day: (function () { var d = isoWeekday(new Date()); return d >= 1 && d <= 5 ? d : 1; })(),
+    child: "todos"
+  };
+
+  function render() {
+    var now = new Date();
+    renderHero(now);
+    renderDays(state.day, now);
+    renderSchedule(state.day, state.child);
+    renderFilters();
+  }
+
+  render();
+  setInterval(render, 60000);
+})();
+</script>
+</body>
+</html>
